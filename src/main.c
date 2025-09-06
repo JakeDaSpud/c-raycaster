@@ -19,10 +19,57 @@ void drawPlayer()
     glEnd();
 }
 
+int mapX = 8, mapY = 8, mapS = 64;
+int map[] =
+{
+    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 0, 1, 0, 0, 0, 0, 1,
+    1, 0, 1, 0, 0, 0, 0, 1,
+    1, 0, 1, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 1, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 1,
+    1, 1, 1, 1, 1, 1, 1, 1,
+};
+
+void drawMap2D()
+{
+    int x, y, xoffset, yoffset, outline;
+    
+    // Set to 0 for no outline
+    outline = 1;
+
+    for (y = 0; y < mapY; y++)
+    {
+        for (x = 0; x < mapX; x++)
+        {
+            if (map[y * mapX + x] == 1) {
+                glColor3f(1, 1, 1);
+            }
+
+            else {
+                glColor3f(0, 0, 0);
+            }
+
+            xoffset = x*mapS;
+            yoffset = y*mapS;
+
+            glBegin(GL_QUADS);
+            glVertex2i(xoffset        + outline, yoffset        + outline);
+            glVertex2i(xoffset        + outline, yoffset + mapS - outline);
+            glVertex2i(xoffset + mapS - outline, yoffset + mapS - outline);
+            glVertex2i(xoffset + mapS - outline, yoffset        + outline);
+            glEnd();
+        }
+    }
+}
+
 void display(GLFWwindow* const window)
 {
     glClear(GL_COLOR_BUFFER_BIT); // Clear the screen
 
+
+    drawMap2D();
     drawPlayer(); // Draw the Player
 
     // Swap front and back buffers
@@ -31,10 +78,10 @@ void display(GLFWwindow* const window)
 
 void buttons(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_A && action == GLFW_PRESS) { px -= playerMoveDistance; }
-    if (key == GLFW_KEY_D && action == GLFW_PRESS) { px += playerMoveDistance; }
-    if (key == GLFW_KEY_W && action == GLFW_PRESS) { py -= playerMoveDistance; }
-    if (key == GLFW_KEY_S && action == GLFW_PRESS) { py += playerMoveDistance; }
+    if ((key == GLFW_KEY_A || key == GLFW_KEY_LEFT ) && action == GLFW_PRESS) { px -= playerMoveDistance; }
+    if ((key == GLFW_KEY_D || key == GLFW_KEY_RIGHT) && action == GLFW_PRESS) { px += playerMoveDistance; }
+    if ((key == GLFW_KEY_W || key == GLFW_KEY_UP   ) && action == GLFW_PRESS) { py -= playerMoveDistance; }
+    if ((key == GLFW_KEY_S || key == GLFW_KEY_DOWN ) && action == GLFW_PRESS) { py += playerMoveDistance; }
     //glutPostRedisplay();
 }
 
